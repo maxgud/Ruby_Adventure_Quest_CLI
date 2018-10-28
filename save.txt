@@ -1,7 +1,7 @@
-@user_name=Max
-@coin=2651
-@health=58
-@Max_Health=100
-@inventory[:Sword]=9
-@inventory[:Helm]=7
-@inventory[:Breast_Plate]=8
+Max
+2509
+105
+105
+57
+3
+7

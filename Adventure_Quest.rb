@@ -15,6 +15,7 @@
 @c = 0
 @d = 0
 @e = 0
+
 #This is an introduction function for new players
 def intro
 	puts "Hello Quester, what is your name?"
@@ -30,35 +31,31 @@ def save
 puts "Which file would you like to save to? save.txt?"
 file_name = $stdin.gets.chomp
 txt_save = open(file_name, 'w')
-line1 = @user_name
-line2 = @coin 
-line3 = @health 
-line4 = @Max_Health
-line5 = @inventory[:Sword]
-line6 = @inventory[:Helm]
-line7 = @inventory[:Breast_Plate]
 
-txt_save.write("@user_name=")
-txt_save.write(line1)
-txt_save.write("\n")
-txt_save.write("@coin=")
-txt_save.write(line2)
-txt_save.write("\n")
-txt_save.write("@health=")
-txt_save.write(line3)
-txt_save.write("\n")
-txt_save.write("@Max_Health=")
-txt_save.write(line4)
-txt_save.write("\n")
-txt_save.write("@inventory[:Sword]=")
-txt_save.write(line5)
-txt_save.write("\n")
-txt_save.write("@inventory[:Helm]=")
-txt_save.write(line6)
-txt_save.write("\n")
-txt_save.write("@inventory[:Breast_Plate]=")
-txt_save.write(line7)
+#Order of saved items
+#@user_name
+#@coin 
+#@health 
+#@Max_Health
+#@inventory[:Sword]
+#@inventory[:Helm]
+#@inventory[:Breast_Plate]
+#
 
+txt_save.write("\"")
+txt_save.write(@user_name)
+txt_save.write("\"\n")
+txt_save.write(@coin)
+txt_save.write("\n")
+txt_save.write(@health)
+txt_save.write("\n")
+txt_save.write(@Max_Health)
+txt_save.write("\n")
+txt_save.write(@inventory[:Sword])
+txt_save.write("\n")
+txt_save.write(@inventory[:Helm])
+txt_save.write("\n")
+txt_save.write(@inventory[:Breast_Plate])
 #it is import to close files after they are opened
 txt_save.close()
 end
@@ -66,6 +63,20 @@ end
 def attack_value_refresh
 @attack_v = @inventory[:Sword] + @inventory[:Helm] + @inventory[:Breast_Plate]
 end
+
+def load 
+
+@user_name = IO.readlines("save.txt")[0].chomp.to_s
+@coin  = IO.readlines("save.txt")[1].chomp.to_i
+@health  = IO.readlines("save.txt")[2].chomp.to_i
+@Max_Health = IO.readlines("save.txt")[3].chomp.to_i
+@inventory[:Sword] = IO.readlines("save.txt")[4].chomp.to_i
+@inventory[:Helm] = IO.readlines("save.txt")[5].chomp.to_i
+@inventory[:Breast_Plate] = IO.readlines("save.txt")[6].chomp.to_i
+attack_value_refresh()
+end
+
+load()
 
 #class definitions
 #a class makes it so several attributes can be 
@@ -460,7 +471,8 @@ def path
 	puts "Coins: " + @coin.to_s
 	puts @inventory
 	puts "Your Attack Value: "+ @attack_v.to_s
-	puts "Which direction do you go?\n1--left\n2--right\n3--straight\n4--Store\n5--Use Herb\n6--Save Game\n7--Exit Game"
+	puts "Which direction do you go " + @user_name.to_s 
+	puts "1--left\n2--right\n3--straight\n4--Store\n5--Use Herb\n6--Save Game\n7--Exit Game"
 	path = gets.chomp.to_i
 
   case path
