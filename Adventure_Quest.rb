@@ -16,67 +16,7 @@
 @d = 0
 @e = 0
 
-#This is an introduction function for new players
-def intro
-	puts "Hello Quester, what is your name?"
-	@user_name = gets.chomp
-	puts "Welcome " + @user_name.to_s 
-	puts "You have " + @coin.to_s + " coins."
-end
 
-intro()
-
-
-def save
-puts "Which file would you like to save to? save.txt?"
-file_name = $stdin.gets.chomp
-txt_save = open(file_name, 'w')
-
-#Order of saved items
-#@user_name
-#@coin 
-#@health 
-#@Max_Health
-#@inventory[:Sword]
-#@inventory[:Helm]
-#@inventory[:Breast_Plate]
-#
-
-txt_save.write("\"")
-txt_save.write(@user_name)
-txt_save.write("\"\n")
-txt_save.write(@coin)
-txt_save.write("\n")
-txt_save.write(@health)
-txt_save.write("\n")
-txt_save.write(@Max_Health)
-txt_save.write("\n")
-txt_save.write(@inventory[:Sword])
-txt_save.write("\n")
-txt_save.write(@inventory[:Helm])
-txt_save.write("\n")
-txt_save.write(@inventory[:Breast_Plate])
-#it is import to close files after they are opened
-txt_save.close()
-end
-
-def attack_value_refresh
-@attack_v = @inventory[:Sword] + @inventory[:Helm] + @inventory[:Breast_Plate]
-end
-
-def load 
-
-@user_name = IO.readlines("save.txt")[0].chomp.to_s
-@coin  = IO.readlines("save.txt")[1].chomp.to_i
-@health  = IO.readlines("save.txt")[2].chomp.to_i
-@Max_Health = IO.readlines("save.txt")[3].chomp.to_i
-@inventory[:Sword] = IO.readlines("save.txt")[4].chomp.to_i
-@inventory[:Helm] = IO.readlines("save.txt")[5].chomp.to_i
-@inventory[:Breast_Plate] = IO.readlines("save.txt")[6].chomp.to_i
-attack_value_refresh()
-end
-
-load()
 
 #class definitions
 #a class makes it so several attributes can be 
@@ -117,6 +57,11 @@ end
 #bag of the player.  No customer item or customer amount
 @item_upgrade_store = Store.new("Upgrade Random Item", 100, 150)
 
+def store_inventory_values
+@herb_store.store_amount
+@floret_store.store_amount
+@item_upgrade_store.store_amount
+end
 #This uses the item name in the Store inventory
 # e.g. @herb_store.item as the customer's item and the customer's 
 #amount of that item initially is 0, the amount can be changed 
@@ -126,6 +71,36 @@ end
 #customer_item #customer.amount
 @herb_customer = Customer_Items.new(@herb_store.store_item, 0)
 @floret_customer = Customer_Items.new(@floret_store.store_item, 0)
+
+def customer_inventory_values
+@herb_customer.customer_amount
+@floret_customer.customer_amount
+end
+
+
+
+def attack_value_refresh
+@attack_v = @inventory[:Sword] + @inventory[:Helm] + @inventory[:Breast_Plate]
+end
+
+
+
+
+#This is an introduction function for new players
+def intro
+	puts "1--Load File"
+	puts "2--New Game"
+	choice = gets.chomp.to_i
+	case choice 
+	when 1
+		load()
+	when 2
+	puts "Hello Quester, what is your name?"
+	@user_name = gets.chomp
+	puts "Welcome " + @user_name.to_s 
+	puts "You have " + @coin.to_s + " coins."
+	end
+end
 
 def buy_an_item
 	puts "Choose the number of the item you would like to buy.?"
@@ -459,6 +434,84 @@ def goblin_large
 	end
 end
 
+
+def save
+puts "Which file would you like to save to? save.txt?"
+file_name = $stdin.gets.chomp
+txt_save = open(file_name, 'w')
+
+#Order of saved items
+#@user_name
+#@coin 
+#@health 
+#@Max_Health
+#@inventory[:Sword]
+#@inventory[:Helm]
+#@inventory[:Breast_Plate]
+#3-Store-items
+#2-Customer-items
+
+txt_save.write(@user_name)
+txt_save.write("\n")
+txt_save.write(@coin)
+txt_save.write("\n")
+txt_save.write(@health)
+txt_save.write("\n")
+txt_save.write(@Max_Health)
+txt_save.write("\n")
+txt_save.write(@inventory[:Sword])
+txt_save.write("\n")
+txt_save.write(@inventory[:Helm])
+txt_save.write("\n")
+txt_save.write(@inventory[:Breast_Plate])
+txt_save.write("\n")
+txt_save.write(@herb_store.store_amount)
+txt_save.write("\n")
+txt_save.write(@floret_store.store_amount)
+txt_save.write("\n")
+txt_save.write(@item_upgrade_store.store_amount)
+txt_save.write("\n")
+txt_save.write(@herb_customer.customer_amount)
+txt_save.write("\n")
+txt_save.write(@floret_customer.customer_amount)
+txt_save.write("\n")
+txt_save.write(@a)
+txt_save.write("\n")
+txt_save.write(@b)
+txt_save.write("\n")
+txt_save.write(@c)
+txt_save.write("\n")
+txt_save.write(@d)
+txt_save.write("\n")
+txt_save.write(@e)
+
+#it is import to close files after they are opened
+txt_save.close()
+end
+
+def load 
+
+@user_name = IO.readlines("save.txt")[0].chomp.to_s
+@coin  = IO.readlines("save.txt")[1].chomp.to_i
+@health  = IO.readlines("save.txt")[2].chomp.to_i
+@Max_Health = IO.readlines("save.txt")[3].chomp.to_i
+@inventory[:Sword] = IO.readlines("save.txt")[4].chomp.to_i
+@inventory[:Helm] = IO.readlines("save.txt")[5].chomp.to_i
+@inventory[:Breast_Plate] = IO.readlines("save.txt")[6].chomp.to_i
+@herb_store.store_amount = IO.readlines("save.txt")[7].chomp.to_i
+@floret_store.store_amount = IO.readlines("save.txt")[8].chomp.to_i
+@item_upgrade_store.store_amount = IO.readlines("save.txt")[9].chomp.to_i
+@herb_customer.customer_amount = IO.readlines("save.txt")[10].chomp.to_i
+@floret_customer.customer_amount = IO.readlines("save.txt")[11].chomp.to_i
+@a = IO.readlines("save.txt")[12].chomp.to_i
+@b = IO.readlines("save.txt")[13].chomp.to_i
+@c = IO.readlines("save.txt")[14].chomp.to_i
+@d = IO.readlines("save.txt")[15].chomp.to_i
+@e = IO.readlines("save.txt")[16].chomp.to_i
+
+attack_value_refresh()
+end
+
 def path
 	puts "      *       *     *        *        *  "
 	puts "* left *      *     *       *  right *   "
@@ -539,6 +592,5 @@ def attack_process
 	exit
 end
 
-puts "Your attack is: " + @attack_v.to_s
-puts "Your total coins:" + @coin.to_s
+intro()
 path()

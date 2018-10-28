@@ -28,7 +28,12 @@ The Health Packs can be extrapolated for all other health pack items
 --Once you get up to a certain health pack level you probably do not 
 	want to buy lower health packs 
 2)
---Save character info to a file, load file / start new game etc.
+--Save/Load *EVERY* attribute of the game--Check!
+-->Max Health / Upgrade-able Max Health 
+-->**I need to do the same thing I did for the attack
+	value refresh but for every item in inventory...
+	--store inventory 
+	--customer inventory 
 3)
 --ADD more monsters, make them random depending on which path 
 4)
