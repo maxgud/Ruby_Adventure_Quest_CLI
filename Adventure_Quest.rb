@@ -10,6 +10,8 @@
 
 #These are associated with empty store variables.  If all of them 
 #are equal to zero no items are in the players bag.
+#I need to associate these variables with specific 
+#store and customer values.  
 @a = 0
 @b = 0
 @c = 0
@@ -223,6 +225,11 @@ def view_your_items
 		puts @floret_customer.customer_amount 
 		else
 		end
+		#these are actually dependent on the store values which 
+		#fluctuate normally.  They need to be dependent on 
+		#customer values...
+		#The more I think about it I can just make them the actual 
+		#variables.  No need to have an extra variable in between...
 		if @a == 0 && @b == 0
 			puts "---------------------------"
 			puts "Your Pack is empty." 
@@ -405,7 +412,9 @@ def treasure_4
 	Breast_Plate_Upgrade()
 	Coin_Upgrade()
 end
-
+########################################
+#MONSTER AREA
+########################################
 def goblin_large
 	puts "You encounter a large goblin..."
 	puts "******************************"
@@ -434,6 +443,65 @@ def goblin_large
 	end
 end
 
+def monster_large
+	puts "You encounter a large monster..."
+	puts "******************************"
+	puts "******************************"
+  puts "  |     _____"
+  puts "  |   -./ .-'"
+  puts "     _  _("
+  puts "   | .)(./"
+  puts "   |    ("
+  puts "   |     |   |"
+  puts "   |   vvv   |"
+  puts "   |  |__    |"
+  puts "  /      `-. |"
+
+	@monster_health = 100
+	@monster_attack = 1
+	puts "Your Health: " + @health.to_s
+	puts "Monster Health: " + @monster_health.to_s
+	puts "1 to Fight\n 2 to Run"
+	choice = gets.chomp.to_i
+	if choice == 1
+		attack_process()
+	else choice == 2
+		path()
+	end
+end
+
+########################################
+#END OF MONSTER AREA
+########################################
+
+########################################
+#ATTACK AREA
+########################################
+def attack_process
+	while @health > 0
+		if @monster_health <= 0
+		treasure_4()
+		path()
+		end
+	puts "1) Attack\n2) Run\n"
+	choice = gets.chomp.to_i
+	if choice == 1
+		puts "Attacking"
+		@health = @health - @monster_attack
+		@monster_health = @monster_health - @attack_v
+		puts "Your Health: " + @health.to_s 
+		puts "Enemy Health: " + @monster_health.to_s
+	else choice == 2
+		puts "Running back to path."
+		path()
+	end
+	end
+	puts "You have died!  Game Over!!"
+	exit
+end
+########################################
+#END OF ATTACK AREA
+########################################
 
 def save
 puts "Which file would you like to save to? save.txt?"
@@ -526,15 +594,15 @@ def path
 	puts "Your Attack Value: "+ @attack_v.to_s
 	puts "Which direction do you go " + @user_name.to_s 
 	puts "1--left\n2--right\n3--straight\n4--Store\n5--Use Herb\n6--Save Game\n7--Exit Game"
-	path = gets.chomp.to_i
+	path_choice = gets.chomp.to_i
 
-  case path
+  case path_choice
   when 1
     puts "You went left."
 		goblin_large()
   when 2
     puts "You went right"
-		path()
+		monster_large()
   when 3
     puts "You Went straight"
 		path()
@@ -567,29 +635,6 @@ def path
     puts "Invalid Choice Try again"
     path()
   end
-end
-
-def attack_process
-	while @health > 0
-		if @monster_health <= 0
-		treasure_4()
-		path()
-		end
-	puts "1) Attack\n2) Run\n"
-	choice = gets.chomp.to_i
-	if choice == 1
-		puts "Attacking"
-		@health = @health - @monster_attack
-		@monster_health = @monster_health - @attack_v
-		puts "Your Health: " + @health.to_s 
-		puts "Enemy Health: " + @monster_health.to_s
-	else choice == 2
-		puts "Running back to path."
-		path()
-	end
-	end
-	puts "You have died!  Game Over!!"
-	exit
 end
 
 intro()
