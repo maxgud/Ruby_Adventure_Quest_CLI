@@ -1,11 +1,15 @@
 #These are my global program variables that are used
 #within and without of defined functions
-
 @health = 100
-@inventory = {:Sword => 5,:Helm => 3}
-@attack_v = @inventory[:Sword] + @inventory[:Helm]
+@Max_Health = 100
+@inventory = {:Sword => 5,:Helm => 3,:Breast_Plate => 0}
+@attack_v = @inventory[:Sword] + @inventory[:Helm] + @inventory[:Breast_Plate]
 @coin = 2500
 @user_name
+
+
+#These are associated with empty store variables.  If all of them 
+#are equal to zero no items are in the players bag.
 @a = 0
 @b = 0
 @c = 0
@@ -20,6 +24,48 @@ def intro
 end
 
 intro()
+
+
+def save
+puts "Which file would you like to save to? save.txt?"
+file_name = $stdin.gets.chomp
+txt_save = open(file_name, 'w')
+line1 = @user_name
+line2 = @coin 
+line3 = @health 
+line4 = @Max_Health
+line5 = @inventory[:Sword]
+line6 = @inventory[:Helm]
+line7 = @inventory[:Breast_Plate]
+
+txt_save.write("@user_name=")
+txt_save.write(line1)
+txt_save.write("\n")
+txt_save.write("@coin=")
+txt_save.write(line2)
+txt_save.write("\n")
+txt_save.write("@health=")
+txt_save.write(line3)
+txt_save.write("\n")
+txt_save.write("@Max_Health=")
+txt_save.write(line4)
+txt_save.write("\n")
+txt_save.write("@inventory[:Sword]=")
+txt_save.write(line5)
+txt_save.write("\n")
+txt_save.write("@inventory[:Helm]=")
+txt_save.write(line6)
+txt_save.write("\n")
+txt_save.write("@inventory[:Breast_Plate]=")
+txt_save.write(line7)
+
+#it is import to close files after they are opened
+txt_save.close()
+end
+
+def attack_value_refresh
+@attack_v = @inventory[:Sword] + @inventory[:Helm] + @inventory[:Breast_Plate]
+end
 
 #class definitions
 #a class makes it so several attributes can be 
@@ -41,77 +87,70 @@ end
 
 #class definitions
 class Store
- attr_accessor :item, :store_amount, :price
- def initialize(item, store_amount, price)
-   @item = item
+ attr_accessor :store_item, :store_amount, :store_price
+ def initialize(store_item, store_amount, store_price)
+   @store_item = store_item
    @store_amount = store_amount
-   @price = price
+   @store_price = store_price
  end
 end
 
 #These are actual definitions that use the class to 
 #define items that are in the Store's inventory
 
-#_s is for the store!!
-@health_pack_store = Store.new("Health Pack", 500, 75)
-@sword_store = Store.new("Sword + 5", 35, 500)
+#store_item store_amount store_price
+@herb_store = Store.new("Herb", 500, 75)
+@floret_store = Store.new("Floret", 35, 500)
+
+#this item is instantly used so it is never in the 
+#bag of the player.  No customer item or customer amount
+@item_upgrade_store = Store.new("Upgrade Random Item", 100, 150)
 
 #This uses the item name in the Store inventory
-# e.g. @health_pack_store.item as the 
-#customer's item and the customer's amount 
-#of that item
-#initially is 0, the amount can be changed 
+# e.g. @herb_store.item as the customer's item and the customer's 
+#amount of that item initially is 0, the amount can be changed 
 #when an item is bought or sold
-#
-#technically there should never be more than 
-#the original amount of items in the store
-#_c is for customer!!!
-@health_pack_customer = Customer_Items.new(@health_pack_store.item, 0)
-@sword_customer = Customer_Items.new(@sword_store.item, 0)
 
-def store_inventory
-	puts "---------------------------"
-	puts "Our store inventory:"
-	puts "Number of " + @health_pack_store.item + "(s)" 
-	puts @health_pack_store.store_amount
-	puts "Price : $" + @health_pack_store.price.to_s
-	puts "Number of " + @sword_store.item + "(s)" 
-	puts @sword_store.store_amount
-	puts "Price : $" + @sword_store.price.to_s
-	menu
-end
+
+#customer_item #customer.amount
+@herb_customer = Customer_Items.new(@herb_store.store_item, 0)
+@floret_customer = Customer_Items.new(@floret_store.store_item, 0)
 
 def buy_an_item
 	puts "Choose the number of the item you would like to buy.?"
 	puts "Coins: " + @coin.to_s	
 	puts "---------------------------"
 	puts "Our store inventory:"
-	puts "1 -- Number of " + @health_pack_store.item + "(s)" 
-	puts @health_pack_store.store_amount
-	puts "Price : $" + @health_pack_store.price.to_s
-	puts "2 -- Number of " + @sword_store.item + "(s)" 
-	puts @sword_store.store_amount
-	puts "Price : $" + @sword_store.price.to_s
+	puts "1 -- Number for " + @herb_store.store_item + "(s)" 
+	puts "Amount :" + @herb_store.store_amount.to_s
+	puts "Price : $" + @herb_store.store_price.to_s
+	puts "2 -- Number for " + @floret_store.store_item + "(s)" 
+	puts "Amount :" + @floret_store.store_amount.to_s
+	puts "Price : $" + @floret_store.store_price.to_s
+  puts "3 -- Number for " + @item_upgrade_store.store_item
+	puts "Amount :" + @item_upgrade_store.store_amount.to_s
+	puts "Price : $" + @item_upgrade_store.store_price.to_s
+
 	choice = gets.to_i
   case choice
   when 1
   @a = 1
-  puts "How many Health Pack would you like to buy at $" + @health_pack_store.price.to_s + "?"
+  puts "How many Herb would you like to buy at $" + @herb_store.store_price.to_s + "?"
 #p_1 is a local variable just for this function
 #It is used to grab an amount from the user
     p_1 = gets.to_i
 #This checks to see if the amount requested to buy
 #is more than the available amount    
-    if p_1 > @health_pack_store.store_amount
-    	puts	"Our appologies, we don't have that many Health Pack, please choose a different amount."
+    if p_1 > @herb_store.store_amount
+    	puts	"Our appologies, we don't have that many Herb, please choose a different amount."
     	puts "---------------------------"
     	buy_an_item
 #This checks to see if the amount times the price
 #is more than the amount of money the user has    	
-    elsif (p_1*@health_pack_store.price) > @coin
-    	puts "Im sorry, you don't have enough money for "+ p_1.to_s + " Health Pack."
-    	puts "The total cost is $" + (p_1*@health_pack_store.price).to_s
-    	menu
+    elsif (p_1*@herb_store.store_price) > @coin
+    	puts "Im sorry, you don't have enough money for "+ p_1.to_s + " Herb."
+    	puts "The total cost is $" + (p_1*@herb_store.store_price).to_s
+    	store_menu
     elsif
 #If there are enough items available and
 #the user has enough money this script is run
@@ -121,163 +160,154 @@ def buy_an_item
 #2)It add the packs to the user
 #3)  It creates a class for the item and the item 
 #amount for the user, not the store
-    @health_pack_store.store_amount = @health_pack_store.store_amount - p_1
-		@health_pack_customer.customer_amount = @health_pack_customer.customer_amount + p_1
-    @coin = @coin - (p_1*@health_pack_store.price)
+    @herb_store.store_amount = @herb_store.store_amount - p_1
+		@herb_customer.customer_amount = @herb_customer.customer_amount + p_1
+    @coin = @coin - (p_1*@herb_store.store_price)
     puts "You bought " + p_1.to_s + " pen(s)"
 	  puts "Your remaining balance: " + @coin.to_s
-  	menu
+  	store_menu
   	end
   when 2
   	@b = 1
-    puts "How many Sword + 5 would you like to buy at $" + @sword_store.price.to_s + "?"
+    puts "How many florets would you like to buy at $" + @floret_store.store_price.to_s + "?"
     p_2 = gets.to_i
-
-    if p_2 > @sword_store.store_amount
-	    puts	"Our appologies, we don't have that many Sword + 5, please choose a different amount."
+    if p_2 > @floret_store.store_amount
+	    puts	"Our appologies, we don't have that many florets, please choose a different amount."
 	    puts "---------------------------"
 	    buy_an_item
-	  elsif (p_2*@sword_store.price) > @coin
-    	puts "Im sorry, you don't have enough money for " + p_2.to_s + " Sword + 5."
-    	puts "The total cost is $" + (p_2*@sword_store.price).to_s
-    	menu 
+	  elsif (p_2*@floret_store.store_price) > @coin
+    	puts "Im sorry, you don't have enough money for " + p_2.to_s + " florets"
+    	puts "The total cost is $" + (p_2*@floret_store.store_price).to_s
+    	store_menu 
     elsif
-	    @sword_store.store_amount = @sword_store.store_amount - p_2
-	    @coin = @coin - (p_2*@sword_store.price)
-
-	    puts "You bought " + p_2.to_s + " Sword + 5"
+	    @floret_store.store_amount = @floret_store.store_amount - p_2
+	    @floret_customer.customer_amount = @floret_customer.customer_amount + p_2
+	    @coin = @coin - (p_2*@floret_store.store_price)
+	    puts "You bought " + p_2.to_s + " florets"
 	    puts "Your remaining balance: " + @coin.to_s
-  		menu
+  		store_menu
   	end
+  when 3
+  	@c = 1
+    p_3 = 1
+    if p_3 > @item_upgrade_store.store_amount
+	    puts	"Our appologies, we don't have that many item upgrades, please choose a different amount."
+	    puts "---------------------------"
+	    buy_an_item
+	  elsif (p_3*@item_upgrade_store.store_price) > @coin
+    	puts "Im sorry, you don't have enough money for an item upgrade."
+    	puts "The total cost is $" + (p_3*@item_upgrade_store.store_price).to_s
+    	store_menu 
+    elsif
+	    @item_upgrade_store.store_amount = @item_upgrade_store.store_amount - p_3
+			option = rand(3)
+
+			case option 
+			when 0
+			@inventory[:Sword] = @inventory[:Sword] +1
+			puts "Sword + 1"
+			when 1
+			@inventory[:Helm] = @inventory[:Helm] + 1
+			puts "Helm + 1"
+			when 2
+			@inventory[:Breast_Plate] = @inventory[:Breast_Plate] + 1
+			puts "Breast Plate + 1"
+			end
+
+	    @coin = @coin - (p_3*@item_upgrade_store.store_price)
+	    puts "You bought an item upgrade."
+	    puts "Your remaining balance: " + @coin.to_s
+  		store_menu
+  	end  	
   else
     puts "Invalid Choice Try again"
     buy_an_item
   end
 end
-
 def view_your_items
 	puts "Your Basket"
 	puts "---------------------------"
-	if @a > 0
-	puts "The amount of " + @health_pack_customer.customer_item + "(s)"
-	puts @health_pack_customer.customer_amount 
-
-	else
-	end
-	if @b > 0
-	puts "The amount of " + @sword_customer.customer_item + "(s)"
-	puts @sword_customer.customer_amount 
-
-	else
-	end
-	if @c > 0
-	puts "The amount of " + @notepad_item.customer_item + "(s)"
-	puts @notepad_item.customer_amount 
-
-	else
-	end
-	if @d > 0
-	puts "The amount of " + @ledger_item.customer_item + "(s)"
-	puts @ledger_item.customer_amount 
-
-	else
-	end
-	if @a == 0 && @b == 0 && @c == 0 && @d == 0
-		puts "---------------------------"
-		puts "Your Pack is empty." 
-		puts "---------------------------"
-	else
-	end
-	menu
+		if @a > 0
+		puts "The amount of " + @herb_customer.customer_item + "(s)"
+		puts @herb_customer.customer_amount 
+		else
+		end
+		if @b > 0
+		puts "The amount of " + @floret_customer.customer_item + "(s)"
+		puts @floret_customer.customer_amount 
+		else
+		end
+		if @a == 0 && @b == 0
+			puts "---------------------------"
+			puts "Your Pack is empty." 
+			puts "---------------------------"
+		else
+		end
+		store_menu
 end
 
 def sell_your_items
 	if @a > 0
 		puts "---------------------------"
-		puts "The number of Health Pack you have : " + @health_pack_customer.customer_amount.to_s
-		puts "How many Health Pack would you like to sell for half of inital cost?"
-		sell_pens = gets.to_i
-		@health_pack_customer.customer_amount = (@health_pack_customer.customer_amount.to_i - sell_pens.to_i)
-		puts "You now have " + @health_pack_customer.customer_amount.to_s + " Health Pack."
-		money_made = (@health_pack_store.price.to_f * 0.5 *sell_pens.to_f)
+		puts "The number of Herb you have : " + @herb_customer.customer_amount.to_s
+		puts "How many Herb would you like to sell for half of inital cost?"
+		sell_health_packs = gets.to_i
+		@herb_customer.customer_amount = (@herb_customer.customer_amount.to_i - sell_health_packs.to_i)
+		puts "You now have " + @herb_customer.customer_amount.to_s + " Herb."
+		money_made = (@herb_store.store_price.to_f * 0.5 *sell_health_packs.to_f)
 		puts "You made $" + money_made.to_s + ".  This will be added to your wallet."   
 		@coin = @coin + money_made
 		puts "---------------------------"
 	end
+
 	if @b > 0
 		puts "---------------------------"
-		puts "The number of Sword + 5 you have : " + @sword_customer.customer_amount.to_s
-		puts "How many penils would you like to sell for half of inital cost?"
-		sell_pencils = gets.to_i
-		@sword_customer.customer_amount = (@sword_customer.customer_amount.to_i - sell_pencils.to_i)
-		puts "You now have " + @sword_customer.customer_amount.to_s + " Sword + 5."
-		money_made = (@sword_store.price.to_f * 0.5 *sell_pencils.to_f)
+		puts "The number of ________ + 5 you have : " + @floret_customer.customer_amount.to_s
+		puts "How many ________ would you like to sell for half of inital cost?"
+		sell_sword_5 = gets.to_i
+		@floret_customer.customer_amount = (@floret_customer.customer_amount.to_i - sell_sword_5.to_i)
+		puts "You now have " + @floret_customer.customer_amount.to_s + " Sword + 5."
+		money_made = (@floret_store.store_price.to_f * 0.5 *sell_sword_5.to_f)
 		puts "You made $" + money_made.to_s + ".  This will be added to your wallet."   
 		@coin = @coin + money_made
 		puts "---------------------------"
 	end
-	if @c > 0
-		puts "---------------------------"
-		puts "The number of notepads you have : " + @notepad_item.customer_amount.to_s
-		puts "How many notepads would you like to sell for half of inital cost?"
-		sell_notepads = gets.to_i
-		@notepad_item.customer_amount = (@notepad_item.customer_amount.to_i - sell_notepads.to_i)
-		puts "You now have " + @notepad_item.customer_amount.to_s + " notepads."
-		money_made = (@notepaded.price.to_f * 0.5 *sell_notepads.to_f)
-		puts "You made $" + money_made.to_s + ".  This will be added to your wallet."   
-		@coin = @coin + money_made
-		puts "---------------------------"
-	end
-	if @d > 0
-		puts "---------------------------"
-		puts "The number of ledgers you have : " + @ledger_item.customer_amount.to_s
-		puts "How many ledgers would you like to sell for half of inital cost?"
-		sell_ledgers = gets.to_i
-		@ledger_item.customer_amount = (@ledger_item.customer_amount.to_i - sell_ledgers.to_i)
-		puts "You now have " + @ledger_item.customer_amount.to_s + " ledgers."
-		money_made = (@ledgered.price.to_f * 0.5 *sell_ledgers.to_f)
-		puts "You made $" + money_made.to_s + ".  This will be added to your wallet."   
-		@coin = @coin + money_made
-		puts "---------------------------"
-	end
-	if @a == 0 && @b == 0 && @c == 0 && @d == 0 
+
+	if @a == 0 && @b == 0
 		puts "You have no items to sell."
-		menu
+		store_menu
 	end
-	menu
+	store_menu
 end
 
 def user_selection
   choice = gets.to_i
   case choice
   when 1
-    store_inventory
-  when 2
     buy_an_item
-  when 3
+  when 2
     view_your_items
-  when 4
+  when 3
     sell_your_items
-  when 5
+  when 4
   	puts "Goodbye"
   	path()
   else
     puts "Invalid Choice Try again"
-    menu
+    store_menu
   end
 end
 
-def menu
+def store_menu
 	if @e == 0
 		#first time at the store here
 	end
 	puts "---------------------------"
 	puts "What would you like to do?"
-	puts "1 -- See our Inventory."
-	puts "2 -- Buy an item."	
-	puts "3 -- View your items."
-	puts "4 -- Sell an item."
-	puts "5 -- Exit"
+	puts "1 -- Buy an item."	
+	puts "2 -- View your items."
+	puts "3 -- Sell an item."
+	puts "4 -- Exit"
 	puts "---------------------------"
 	user_selection
 end
@@ -305,7 +335,7 @@ def Sword_Upgrade
  			puts "-----------"
  		end
  	end
-	@attack_v = @inventory[:Sword] + @inventory[:Helm]
+	attack_value_refresh()
 end
 
 def Helm_Upgrade
@@ -333,10 +363,16 @@ def Helm_Upgrade
  			puts "-----------"
  		end
  	end
-	@attack_v = @inventory[:Sword] + @inventory[:Helm]
+	attack_value_refresh()
 end
 
-def coin_Upgrade
+def Breast_Plate_Upgrade
+	puts "Breast Plate Upgrade + 2!!\n"
+ 	@inventory[:Breast_Plate] = @inventory[:Breast_Plate] + 2
+	attack_value_refresh()
+end
+
+def Coin_Upgrade
 	choice = rand(100) + 1
 	@coin = @coin + choice.to_i
 	puts "Found #{choice} coins."
@@ -351,7 +387,7 @@ def treasure_1
 	elsif choice == 1
 	Helm_Upgrade()
 	else choice == 2
-	coin_Upgrade()
+	Coin_Upgrade()
 	end
 end
 
@@ -364,17 +400,24 @@ def treasure_2
 	Helm_Upgrade()
 	elsif choice == 1
 	Helm_Upgrade()
-	coin_Upgrade()
+	Coin_Upgrade()
 	else choice == 2
 	Sword_Upgrade()
-	coin_Upgrade()
+	Coin_Upgrade()
 	end
 end
 
 def treasure_3
 	Sword_Upgrade()
 	Helm_Upgrade()
-	coin_Upgrade()
+	Coin_Upgrade()
+end
+
+def treasure_4
+	Sword_Upgrade()
+	Helm_Upgrade()
+	Breast_Plate_Upgrade()
+	Coin_Upgrade()
 end
 
 def goblin_large
@@ -415,7 +458,9 @@ def path
 	puts "     *      * *     *  *        *        "					
 	puts "Your Health: " + @health.to_s
 	puts "Coins: " + @coin.to_s
-	puts "Which direction do you go?\n1--left\n2--right\n3--straight\n4--Use Health Pack"
+	puts @inventory
+	puts "Your Attack Value: "+ @attack_v.to_s
+	puts "Which direction do you go?\n1--left\n2--right\n3--straight\n4--Store\n5--Use Herb\n6--Save Game\n7--Exit Game"
 	path = gets.chomp.to_i
 
   case path
@@ -429,20 +474,29 @@ def path
     puts "You Went straight"
 		path()
   when 4
+  	store_menu()
 
-    if @health_pack_customer.customer_amount > 0
-		@health_pack_customer.customer_amount = @health_pack_customer.customer_amount - 1
+  when 5
+
+    if @herb_customer.customer_amount > 0
+		@herb_customer.customer_amount = @herb_customer.customer_amount - 1
 		@health = 100
 		path()
 		else
 		puts "*******************************" 
-		puts "You don't have any Health Packs"
+		puts "You don't have any Herbs"
 		puts "*******************************"
 		path()
 		end
   when 5
   	puts "Goodbye"
   	path()
+  when 6
+  	puts "Saving"
+  	save()
+  	path()
+  when 7
+  	exit
   	
   else
     puts "Invalid Choice Try again"
@@ -453,8 +507,8 @@ end
 def attack_process
 	while @health > 0
 		if @monster_health <= 0
-		treasure_3()
-		menu
+		treasure_4()
+		path()
 		end
 	puts "1) Attack\n2) Run\n"
 	choice = gets.chomp.to_i
