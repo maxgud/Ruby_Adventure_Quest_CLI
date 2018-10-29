@@ -9,6 +9,47 @@ Sword_Upgrade --
 Helm_Upgrade
 coin_Upgrade
 
+I think for what this program is I have spent 
+enough time on it.  Maybe I will make a better 
+game in the future that will be click-able and 
+playable on the web.  But I have learned a lot 
+with the CLI.  
+
+What I learned:
+
+1) I have my definitely figured out a lot with 
+definiting classes and organizing terms.
+
+2) I have learnd how to easily make case statements
+
+3) I have learned a lot about local and global 
+variables 
+
+4) Strings / basic math , updating and keeping track 
+of variables stored
+
+5) I am actually pretty impressed I figured out the 
+save / load component.
+
+6) The sequence of where to put scripts so things load 
+properly
+
+7) Functions to update values of variables when they 
+change 
+
+8) Geting input from the user, and using it.
+
+9) Integrating other code, like the store program and 
+refining it for the specific code needed.
+
+10) Monsters and attack processs , (The attack process
+can be thoroughly refined.  But where it is, is a start.)
+
+11) Randomizing treasure /other values 
+
+12) Changing values in a hash for the attack value.
+Updating it and making it consistent.
+
 
 
 Currently What To Program :
@@ -25,17 +66,16 @@ The Health Packs can be extrapolated for all other health pack items
 
 
 1)
---Once you get up to a certain health pack level you probably do not 
-	want to buy lower health packs 
+--Once you get up to a certain health pack level you probably do 
+	not want to buy lower health packs 
 2)
 --Save/Load *EVERY* attribute of the game--Check!
 -->Max Health / Upgrade-able Max Health 
--->**I need to do the same thing I did for the attack
-	value refresh but for every item in inventory...
-	--store inventory 
-	--customer inventory 
+
 3)
---ADD more monsters, make them random depending on which path 
+--ADD more monsters, make them random depending on which path
+--Added another monster, made sure attributes were recognized...
+--10 monsters should be more than enough, I have 2 now. 
 4)
 --ADD higher levels, harder monsters
 5)
@@ -45,7 +85,7 @@ The Health Packs can be extrapolated for all other health pack items
 global variables for the same attack_process
 7)
 --Make every battle result in a PERCENT so the game can be 
-infinitely scaleable
+"infinitely" scaleable
 -------------------
 	This involves uses hashes paired items for the characters inventory 
 	And the character stats
@@ -64,10 +104,6 @@ infinitely scaleable
 	I either need to make new attack processes for each new monster 
 	Or I need to make global variables for the attack process which is 
 	defined by the monster being fought.  I like the latter much better.
-
-
-
-
 
 
 
@@ -108,5 +144,11 @@ you get.  The more upgrades you get the harder the monsters can be.
 The more health you can get.
 
 There is no pleateau...
+
+[Third Macro Goal]
+Make comments about ever line of significant code.
+Reduce all code into types of code 
+(Which code was new, like the load/save, which was from the book?)
+Make a program with just one of each type of code type.
 *************
 
